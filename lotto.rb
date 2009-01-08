@@ -19,6 +19,13 @@ class Result
   end
 end
 
+class WinShare
+  # {"7" => n €,
+  #  "6+1" => n €}
+  def money?(nums,extra)
+  end
+end
+
 class LottoParser
   attr :results, true
   attr :year
@@ -26,6 +33,7 @@ class LottoParser
   def initialize(year)
     @year = year
     self.results = []
+    self.winshares = {} # kierros => WinShare
 
     @url = URI.parse('https://www.veikkaus.fi/tuloshaku')
     @http = Net::HTTP.new(@url.host, @url.port)
@@ -45,7 +53,17 @@ class LottoParser
     @http.request(req).body
   end
 
-  def next_results_page(path)
+  def initial_winshare_page
+    req = Net::HTTP::Post.new(@url.path)
+    req.set_form_data({ 'Z_ACTION' => 'Hae+voitonjaot',
+                        'game' => 'lotto',
+                        'op' => 'results',
+                        'type' => 'year_winshares',
+                        'year' => self.year }) # Vuosi parametrein myöhemmin
+    @http.request(req).body
+  end
+
+  def next_page(path)
     req = Net::HTTP::Get.new(path)
     @http.request(req).body
   end
@@ -67,9 +85,11 @@ class LottoParser
 
     link = doc/'div.commands/ul/li/a[text()="Seuraava >>"]'
     if link
-      self.create_results(self.next_results_page(link.attr('href')))
+      self.create_results(self.next_page(link.attr('href')))
     end
   end
+
+  def create_winshare_list
 end
 
 parser = LottoParser.new('2008')
@@ -96,11 +116,3 @@ sorted.each{|n|
 
 puts "\nSuosituimmista koottu rivi: " +
   sorted[0,7].sort{|a,b| a[0].to_i <=> b[0].to_i}.map{|i|i[0]}.join(' ')
-
-# Voitonjakojen haku:
-# POST https://www.veikkaus.fi/tuloshaku
-# Z_ACTION: Hae+voitonjaot
-# game: lotto
-# op: results
-# type: year_winshares
-# year: 2008
