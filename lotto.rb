@@ -64,7 +64,7 @@ class LottoParser
                                 :extra_numbers => (row/'td:nth(5)').inner_text
                               }))
     }
-    puts @results.size
+
     link = doc/'div.commands/ul/li/a[text()="Seuraava >>"]'
     if link
       self.create_results(self.next_results_page(link.attr('href')))
@@ -95,7 +95,7 @@ sorted.each{|n|
 }
 
 puts "Suosituimmista koottu rivi: " +
-  sorted[0,7].sort{|a,b| a[0] <=> b[0]}.map{|i|i[0]}.join(' ')
+  sorted[0,7].sort{|a,b| a[0].to_i <=> b[0].to_i}.map{|i|i[0]}.join(' ')
 
 # Voitonjakojen haku:
 # POST https://www.veikkaus.fi/tuloshaku
