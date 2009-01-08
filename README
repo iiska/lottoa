@@ -1,1 +1,1 @@
-Simple Ruby app which parses and analyzes results of the Lotto game by the Finnish Veikkaus Oy.
+Simple Ruby app which parses and analyzes results of the Lotto game by the Finnish Veikkaus Oy using net/http and Hpricot gem.
