@@ -21,7 +21,7 @@ parser.results.each{|r|
 sorted = jakauma.sort{|a,b| b[1] <=> a[1]}
 
 puts "Vuoden #{parser.year} tiheimmin esiintyneet numerot"
-sorted.each{|n|
+sorted[0,10].each{|n|
   puts "#{n[0]}:\t#{n[1]} kertaa\t=\t#{"%.2f" % (n[1].to_f / parser.results.size * 100)}%"
 }
 
