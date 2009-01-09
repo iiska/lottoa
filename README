@@ -1,3 +1,3 @@
 Simple Ruby app done while studying and testing the use of Hpricot gem and
-net/htpp. Application parses and analyzes results of the Lotto game by the
+net/http. Application parses and analyzes results of the Lotto game by the
 Finnish Veikkaus Oy using the result archives available at Veikkaus' website.
