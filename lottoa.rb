@@ -29,6 +29,8 @@ selected_row = sorted[0,7].sort{|a,b| a[0].to_i <=> b[0].to_i}.map{|i|i[0]}
 
 puts "\nSuosituimmista koottu rivi: " + selected_row.join(' ')
 
+best_n = 0
+best_e = 0
 total = parser.results.inject(0.0){|sum,r|
   a = r.numbers & selected_row
   if a
@@ -42,7 +44,12 @@ total = parser.results.inject(0.0){|sum,r|
   else
     e = 0
   end
+  if n >= best_n
+    best_n = n
+    best_e = e if e > best_e
+  end
   sum += parser.winshares[r.round].money?(n,e)
 }
 
+puts "Paras tulos vuoden aikana: #{best_n} oikein ja #{best_e} lisänumeroa"
 puts "Tulos vuoden pelaamisen jälkeen: %.2f€" % total
