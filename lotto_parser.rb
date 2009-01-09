@@ -1,30 +1,13 @@
-#! /usr/bin/env ruby
 # -*- coding: utf-8 -*-
-
 require 'rubygems'
 require 'net/http'
 require 'net/https'
 require 'hpricot'
 require 'uri'
 
+require 'result'
+require 'win_share'
 
-class Result
-  attr_accessor :round, :date, :numbers, :extra_numbers
-
-  def initialize(opts)
-    self.round = opts[:round]
-    self.date = opts[:date]
-    self.numbers = opts[:numbers]
-    self.extra_numbers = opts[:extra_numbers]
-  end
-end
-
-class WinShare
-  # {"7" => n €,
-  #  "6+1" => n €}
-  def money?(nums,extra)
-  end
-end
 
 class LottoParser
   attr :results, true
@@ -91,28 +74,3 @@ class LottoParser
 
   def create_winshare_list
 end
-
-parser = LottoParser.new('2008')
-
-jakauma = {}
-
-parser.results.each{|r|
-  r.numbers.split.each{|i|
-    jakauma[i] = 0 if !jakauma[i]
-    jakauma[i] += 1
-  }
-  r.extra_numbers.split.each{|i|
-    jakauma[i] = 0 if !jakauma[i]
-    jakauma[i] += 1
-  }
-}
-
-sorted = jakauma.sort{|a,b| b[1] <=> a[1]}
-
-puts "Vuoden #{parser.year} tiheimmin esiintyneet numerot"
-sorted.each{|n|
-  puts "#{n[0]}:\t#{n[1]} kertaa\t=\t#{"%.2f" % (n[1].to_f / parser.results.size * 100)}%"
-}
-
-puts "\nSuosituimmista koottu rivi: " +
-  sorted[0,7].sort{|a,b| a[0].to_i <=> b[0].to_i}.map{|i|i[0]}.join(' ')
